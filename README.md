@@ -5,9 +5,9 @@ How to run server on Windows?
 -----------------------------
 Other options:
 - If you want to run it on linux, you should read
-[how to run the server on Ubuntu](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/linux-docker-compose#ubuntu-portable-script)
+[how to run the server on Ubuntu](https://github.com/codenjoyme/codenjoy-portable-linux.git#ubuntu-portable-script)
 - If you want to run simple version of linex server, you should read 
-[how to run the server on Linux (simple version)](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/linux-docker#linux-portable-script-simple-version)
+[how to run the server on Linux (simple version)](https://github.com/codenjoyme/codenjoy-portable-linux-lite.git#linux-portable-script-simple-version)
 
 I prepared to you portable version (for windows) so you can run it without
 jdk/maven installation. This version uses their own JDK8, Git and Maven,
