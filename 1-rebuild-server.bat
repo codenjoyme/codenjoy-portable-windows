@@ -2,35 +2,34 @@ call 00-settings.bat
 
 del /Q .\files\*.*
 
-rd /S /Q %ROOT%\codenjoy\CodingDojo\server\target
-
-set MVNW=%ROOT%\codenjoy\CodingDojo\mvnw
+rd /S /Q %SERVER_SOURCES%\target
 
 cd %ROOT%
 
-if not exist %ROOT%\codenjoy (
-    goto :printGitClone
+if not exist %CODENJOY_HOME% (
+    call :printGitClone
 
-    mkdir %ROOT%\codenjoy
-    call %GIT_HOME%\cmd\git clone %GIT_REPO%
+    mkdir %CODENJOY_HOME%
+    call %GIT% clone --recursive %GIT_REPO% %CODENJOY_HOME%
 )
 
-cd %ROOT%\codenjoy\CodingDojo
+cd %CODENJOY_HOME%\CodingDojo
 
-call %GIT_HOME%\cmd\git config --global core.autocrlf true
+call %GIT% config --global core.autocrlf true
 if "%GIT_REVISION%"=="" (
     set GIT_REVISION=master
 )
 echo GIT_REVISION=%GIT_REVISION%
 if not "%GIT_REVISION%"=="local" (
     call :printGitUpdate
-    
-    call %GIT_HOME%\cmd\git clean -fx
-    call %GIT_HOME%\cmd\git reset --hard
-    call %GIT_HOME%\cmd\git fetch --all
-    call %GIT_HOME%\cmd\git checkout "%GIT_REVISION%"
-    call %GIT_HOME%\cmd\git pull origin
-    call %GIT_HOME%\cmd\git status"
+
+    call %GIT% clean -fx
+    call %GIT% reset --hard
+    call %GIT% fetch --all
+    call %GIT% checkout "%GIT_REVISION%"
+    call %GIT% pull origin
+    call %GIT% submodule update
+    call %GIT% status"
 
     call :askGitPullWasSuccess
 )
@@ -57,26 +56,26 @@ echo GAMES_TO_RUN=%GAMES_TO_RUN%
 IF "%REBUILD_SOURCES%"=="yes" (
     IF "%GAMES_TO_RUN%"=="" (
         call %MVNW% clean install -DskipTests=%SKIP_TESTS%
-        
+
         call :askBuildWasSuccess
     ) else (
-        cd %ROOT%\codenjoy\CodingDojo\games
+        cd %GAMES_SOURCES%
         call %MVNW% clean install -N
         call :askBuildWasSuccess
-        
-        cd %ROOT%\codenjoy\CodingDojo\games\engine
+
+        cd %GAMES_SOURCES%\engine
         call %MVNW% clean install -DskipTests
         call :askBuildWasSuccess
-        
+
         for %%a in ("%GAMES_TO_RUN:,=" "%") do (
-            cd %ROOT%\codenjoy\CodingDojo\games\%%~a
+            cd %GAMES_SOURCES%\%%~a
             call %MVNW% clean install -DskipTests
             call :askBuildWasSuccess
         )
     )
 )
 
-cd %ROOT%\codenjoy\CodingDojo\server
+cd %SERVER_SOURCES%
 
 IF "%GAMES_TO_RUN%"=="" (
     call %MVNW% clean package -DskipTests=%SKIP_TESTS% -DallGames
@@ -86,10 +85,20 @@ IF "%GAMES_TO_RUN%"=="" (
 call :askBuildWasSuccess
 
 mkdir %APP_HOME%
-echo %ROOT%\codenjoy\CodingDojo\server\target\codenjoy-contest.war
-copy %ROOT%\codenjoy\CodingDojo\server\target\codenjoy-contest.war %APP_HOME%\server.war
+echo %SERVER_SOURCES%\target\codenjoy-contest.war
+copy %SERVER_SOURCES%\target\codenjoy-contest.war %APP_HOME%\server.war
 
 cd %ROOT%
+
+echo off
+echo [44;93m
+echo        +-------------------------------------------------+        
+echo        !           Codenjoy already built                !
+echo        !      Please run [102;30m2-start-server.bat[44;93m        !        
+echo        +-------------------------------------------------+        
+echo [0m
+echo on
+pause >nul
 
 goto :eof
 

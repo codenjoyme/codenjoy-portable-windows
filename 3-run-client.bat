@@ -4,9 +4,6 @@ echo off
 echo [44;93m
 echo        +-------------------------------------------------------------------------+        
 echo        !                 Now we are starting your client...                      !        
-echo        !           Please register your@mail.com user without password           !        
-echo        !        Or copy browser URL after registration into YourSolver.java      !  
-echo        !      into com.codenjoy.dojo.(SELECTED_GAME).client package from client  !  
 echo        +-------------------------------------------------------------------------+        
 echo [0m
 echo on
@@ -18,26 +15,28 @@ echo off
 echo [44;93m
 set /p GAME_TO_RUN="Please select game (snake or bomberman for example):"
 echo [0m
+echo on
 
-Set SELECTED_GAME=%ROOT%\client\%GAME_TO_RUN%-servers
+echo off
+echo [44;93m
+set /p LANGUAGE="Please select programming language (java, java-script, pseudo):"
+echo [0m
+echo on
 
-if exist %SELECTED_GAME% (
-    cd %SELECTED_GAME%
-    call mvnw clean install -DskipTests=%SKIP_TESTS%
-    call mvnw exec:java -D"exec.mainClass"="com.codenjoy.dojo.%GAME_TO_RUN%.client.YourSolver"
-)
+cd %CLIENT_SOURCES%
+set OLD_ROOT=%ROOT%
+set ROOT=%CLIENT_SOURCES%
 
-if not exist %SELECTED_GAME% (
-    echo off
-    echo [44;93m
-    echo        +-------------------------------------------------------------------------+        
-    echo        !                 There is no client for this game                        !        
-    echo        +-------------------------------------------------------------------------+        
-    echo [0m
-    echo on    
-)
+	set SKIP_JDK_INSTALL=true
+	call 1-download-env.bat
 
-echo Press any key to exit
-pause >nul
+	cd %CLIENT_SOURCES%
+	call 2-build.bat
 
+	cd %CLIENT_SOURCES%
+	call 3-run.bat
+
+set ROOT=%OLD_ROOT%
 cd %ROOT%
+
+pause >nul
