@@ -28,6 +28,8 @@ if not "%GIT_REVISION%"=="local" (
     call %GIT% fetch --all
     call %GIT% checkout "%GIT_REVISION%"
     call %GIT% pull origin
+	call %GIT% submodule foreach %GIT% clean -fx
+	call %GIT% submodule foreach %GIT% reset --hard
     call %GIT% submodule update
     call %GIT% status"
 
