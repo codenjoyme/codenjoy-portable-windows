@@ -13,7 +13,7 @@ IF "%DEBUG%"=="true" (
 
 echo off
 echo [44;93m
-set /p GAME_TO_RUN="Please select game (snake or bomberman for example):"
+set /p GAME_TO_RUN="Please select game (snake or mollymage for example):"
 echo [0m
 echo on
 
