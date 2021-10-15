@@ -65,6 +65,10 @@ IF "%REBUILD_SOURCES%"=="yes" (
         call %MVNW% clean install -N
         call :askBuildWasSuccess
 
+        cd %GAMES_SOURCES%\clients\java
+        call %MVNW% clean install -DskipTests
+        call :askBuildWasSuccess
+
         cd %GAMES_SOURCES%\engine
         call %MVNW% clean install -DskipTests
         call :askBuildWasSuccess
