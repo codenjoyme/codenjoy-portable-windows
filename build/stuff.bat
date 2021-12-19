@@ -34,7 +34,7 @@ call %RUN% :init_colors
     set SPRING_PROFILES=sqlite
     set DEBUG=false
 
-    set RUN_EXECUTABLE_WAR=true
+    set RUN_WAR=ask
 
     set CODENJOY_HOME=%ROOT%\codenjoy
     set SERVER_SOURCES=%CODENJOY_HOME%\CodingDojo\server
@@ -67,12 +67,11 @@ call %RUN% :init_colors
     call %RUN% :color ‘%CL_INFO%‘ ‘GIT_REPO=%GIT_REPO%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘GIT_REVISION=%GIT_REVISION%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘GAMES_TO_RUN=%GAMES_TO_RUN%‘
-    call %RUN% :color ‘%CL_INFO%‘ ‘GAMES_TO_RUN=%GAMES_TO_RUN%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘CONTEXT=%CONTEXT%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘PORT=%PORT%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘SPRING_PROFILES=%SPRING_PROFILES%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘DEBUG=%DEBUG%‘
-    call %RUN% :color ‘%CL_INFO%‘ ‘RUN_EXECUTABLE_WAR=%RUN_EXECUTABLE_WAR%‘
+    call %RUN% :color ‘%CL_INFO%‘ ‘RUN_WAR=%RUN_WAR%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘CODENJOY_HOME=%CODENJOY_HOME%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘SERVER_SOURCES=%SERVER_SOURCES%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘GAMES_SOURCES=%GAMES_SOURCES%‘
@@ -228,19 +227,31 @@ call %RUN% :init_colors
     goto :eof
 
 :run
-    call :ask_games
-
     call %RUN% :eval_echo ‘explorer http://127.0.0.1:%PORT%%CONTEXT%‘
 
-    call %RUN% :color ‘%CL_INFO%‘ ‘RUN_EXECUTABLE_WAR=%RUN_EXECUTABLE_WAR%‘
-
-    if "%RUN_EXECUTABLE_WAR%"=="true" (
-        call %RUN% :eval_echo ‘cd %ROOT%‘
-        call %RUN% :eval_echo ‘%JAVA% -jar %APP_HOME%\server.war --spring.profiles.active=%SPRING_PROFILES% --context=%CONTEXT% --page.main.unauthorized=false --server.port=%PORT%‘
+    set OLD=%RUN_WAR%
+    if "%RUN_WAR%"=="ask" (
+        set "RUN_WAR="
+        call %RUN% :color ‘%CL_QUESTION%‘ ‘Do we need to run the built [w]ar file or ask [m]aven to start the server: [w/m]‘
+        set /p ANSWER=
     )
+    if "%ANSWER%"=="w" set RUN_WAR=true
+    if "%ANSWER%"=="m" set RUN_WAR=false
 
-    if "%RUN_EXECUTABLE_WAR%"=="false" (
-        call %RUN% :eval_echo ‘cd %SERVER_SOURCES%‘
-        call %RUN% :eval_echo ‘%MVNW% clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dspring.profiles.active=%SPRING_PROFILES% -Dcontext=%CONTEXT% -Dpage.main.unauthorized=false -Dserver.port=%PORT% %BUILD_GAMES%‘
-    )
+    call %RUN% :color ‘%CL_INFO%‘ ‘RUN_WAR=%RUN_WAR%‘
+
+    if "%RUN_WAR%"=="true" call :run_war
+    if "%RUN_WAR%"=="false" call :run_maven
+    set RUN_WAR=%OLD%
+    goto :eof
+
+:run_war
+    call %RUN% :eval_echo ‘cd %ROOT%‘
+    call %RUN% :eval_echo ‘%JAVA% -jar %APP_HOME%\server.war --spring.profiles.active=%SPRING_PROFILES% --context=%CONTEXT% --page.main.unauthorized=false --server.port=%PORT%‘
+    goto :eof
+
+:run_maven
+    call :ask_games
+    call %RUN% :eval_echo ‘cd %SERVER_SOURCES%‘
+    call %RUN% :eval_echo ‘%MVNW% clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dspring.profiles.active=%SPRING_PROFILES% -Dcontext=%CONTEXT% -Dpage.main.unauthorized=false -Dserver.port=%PORT% %BUILD_GAMES%‘
     goto :eof

@@ -65,9 +65,10 @@ not:
   * Select `b` to checkout codenjoy repo at given `GIT_REVISION` revision/branch/hash commit and build sources.
   * Select `t` to run tests.
   * Select `r` to run server. 
-    * There are two ways to run:
-      * `RUN_EXECUTABLE_WAR=true` will run war file at the `.app/server.war` (created on build phase).
-      * `RUN_EXECUTABLE_WAR=false` will run server with maven.
+    * There are three ways to run:
+      * `RUN_WAR=true` will run war file at the `.app/server.war` (created on build phase).
+      * `RUN_WAR=false` will run server with maven.
+      * `RUN_WAR=ask` will ask what to do.
     * It will immediately open the
     page in the browser and 404 will be displayed there. Do not worry, give
     the server a start. After that you will see in the console: 
