@@ -25,24 +25,13 @@ call %RUN% :init_colors
     goto :eof          
 
 :settings
-    set GIT_REPO=https://github.com/codenjoyme/codenjoy.git
-    set GIT_REVISION=master
-    set GAMES_TO_RUN=ask
-
-    set CONTEXT=/codenjoy-contest
-    set PORT=8080
-    set SPRING_PROFILES=sqlite
-    set DEBUG=false
-
-    set RUN_WAR=ask
-
     set CODENJOY_HOME=%ROOT%\codenjoy
     set SERVER_SOURCES=%CODENJOY_HOME%\CodingDojo\server
     set GAMES_SOURCES=%CODENJOY_HOME%\CodingDojo\games
     set CLIENT_SOURCES=%CODENJOY_HOME%\CodingDojo\clients
 
     set APP_HOME=%ROOT%\.app
-    set BUILD_GAMES=
+    set "BUILD_GAMES="
 
     if "%INSTALL_LOCALLY%"=="true" ( set JAVA_HOME=)
     if "%INSTALL_LOCALLY%"=="true" ( set MAVEN_HOME=)
@@ -63,33 +52,18 @@ call %RUN% :init_colors
 	set GIT=git-scm
     set PATH=%ROOT%\.%GIT%\cmd;%PATH%
 
-    echo Language environment variables
-    call %RUN% :color ‘%CL_INFO%‘ ‘GIT_REPO=%GIT_REPO%‘
-    call %RUN% :color ‘%CL_INFO%‘ ‘GIT_REVISION=%GIT_REVISION%‘
-    call %RUN% :color ‘%CL_INFO%‘ ‘GAMES_TO_RUN=%GAMES_TO_RUN%‘
-    call %RUN% :color ‘%CL_INFO%‘ ‘CONTEXT=%CONTEXT%‘
-    call %RUN% :color ‘%CL_INFO%‘ ‘PORT=%PORT%‘
-    call %RUN% :color ‘%CL_INFO%‘ ‘SPRING_PROFILES=%SPRING_PROFILES%‘
-    call %RUN% :color ‘%CL_INFO%‘ ‘DEBUG=%DEBUG%‘
-    call %RUN% :color ‘%CL_INFO%‘ ‘RUN_WAR=%RUN_WAR%‘
+    echo Other environment variables
     call %RUN% :color ‘%CL_INFO%‘ ‘CODENJOY_HOME=%CODENJOY_HOME%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘SERVER_SOURCES=%SERVER_SOURCES%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘GAMES_SOURCES=%GAMES_SOURCES%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘CLIENT_SOURCES=%CLIENT_SOURCES%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘APP_HOME=%APP_HOME%‘
-    call %RUN% :color ‘%CL_INFO%‘ ‘INSTALL_LOCALLY=%INSTALL_LOCALLY%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘PATH=%PATH%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘JAVA_HOME=%JAVA_HOME%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘MAVEN_HOME=%MAVEN_HOME%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘MAVEN_OPTS=%MAVEN_OPTS%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘MAVEN_USER_HOME=%MAVEN_USER_HOME%‘
     call %RUN% :color ‘%CL_INFO%‘ ‘MVNW_VERBOSE=%MVNW_VERBOSE%‘
-
-    set GIT_ARCH_URL=https://github.com/git-for-windows/git/releases/download/v2.34.1.windows.1/MinGit-2.34.1-64-bit.zip
-    set GIT_ARCH_FOLDER=
-
-    set ARCH_URL=https://aka.ms/download-jdk/microsoft-jdk-11.0.11.9.1-windows-x64.zip
-    set ARCH_FOLDER=jdk-11.0.11+9
     goto :eof
 
 :install
