@@ -1,5 +1,12 @@
-.jdk
-.maven
-.gitTool
-.codenjoy
+codenjoy/
+.mvn/repository/
+.mvn/wrapper/dists/
+.jdk/
+.git-scm/
 .tools/*.zip
+.app/
+database/
+logs/
+
+# macOS
+.DS_Store
