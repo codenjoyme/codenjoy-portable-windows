@@ -36,7 +36,7 @@ like git repo, branch name where the server will be built from
   * `set GIT_REVISION=master` commit where the server will be built from
     * it can be `master`
     * it can be `local` - then we don't touch your local changes
-    * it can be a branch name like `snake_with_something`
+    * it can be a branch name like `knibert_with_something`
     * it can be commit hash like `43bd382`
     * or tag name like `v1.1.24`
 - There are several steps where you should check something and press the
